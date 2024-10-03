@@ -1,0 +1,40 @@
+{%extends "base.html"%}
+{% from "form_macros.html" import render_field %}
+
+{% block title%}
+{{ current_user.username}}
+{%endblock%}
+
+{% block content%}
+
+
+  <article class="flashes">
+    {% with messages = get_flashed_messages() %}
+       {% if messages %}
+         <ul>
+              {% for message in messages %}
+                <li> {{ message }}</li>
+              {% endfor %}
+         </ul>
+        {% endif %}
+    {% endwith %}
+</article>
+
+<article>
+    <h1 style="clear:both">YOUR PROFILE</h1>
+    <form action="" method="post">
+        {{ form.hidden_tag() }}
+        <table>
+            {{ render_field(form.email, size=50, placeholder = "your email") }}
+            {{ render_field(form.bio,  placeholder = "your bio") }}
+ 
+
+            <tr class="submit">
+                <td></td>
+                <td><button type="submit">Make Changes</button></td>
+            </tr>
+        </table>
+    </form>
+</article>
+
+{%endblock%}

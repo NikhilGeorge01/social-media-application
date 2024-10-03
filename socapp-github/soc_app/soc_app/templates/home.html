@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% from 'form_macros.html' import render_field %}
+
+{% block title %}
+   Home
+{% endblock %}
+
+{% block content %}
+<h1>Hello {{ current_user.username }}!</h1>
+<div>
+    <form action="" method="POST">
+        {{ form.hidden_tag() }}
+        <div class="form-group">
+            <label for="">Say Something:</label>
+            {{ render_field(form.content, class="form-control", placeholder="Tell your story") }}
+        </div>
+        <button type="submit" class="btn btn-primary">Post</button>
+    </form>
+</div>
+
+<div class="row" style="margin-left: -250px;"> <!-- Bootstrap row -->
+    <div class="col-md-4"> <!-- Profile card column -->
+        <div class="card">
+            <img class="card-img-top" src="{{ current_user.avatar(128) }}" alt="{{ gravatar }}">
+            <div class="card-body">
+                <h5 class="card-title">{{ current_user.email }}</h5>
+                <p class="card-text">Take a glance at your profile</p>
+                <a href="{{ url_for('profile') }}" class="btn btn-primary">Profile</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-8"> <!-- Posts column -->
+        {% if posts %}
+            {% for post in posts %}
+                <div class="card mb-3">
+                    <div class="card-header">
+                        {{ post.posted_by }}
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">{{ post.content }}</p>
+                        <a href="{{ url_for('comment', id=post.id) }}">Comment</a>
+                    </div>
+                    {% for comment in post.comments %}
+                        <div class="card-footer">
+                            {{ comment.content }} ------ <em>{{ comment.posted_by }}</em>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No posts made.</p>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}
+
